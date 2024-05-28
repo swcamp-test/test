@@ -7,11 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 8080 --host",
-    "start": "node server.js"  // 추가된 부분: Elastic Beanstalk에서 애플리케이션을 시작하는 스크립트
+    "start": "node server.js"
   },
   "dependencies": {
     "vue": "^3.4.21",
-    "express": "^4.17.1"  // 추가된 부분: Express 의존성
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
