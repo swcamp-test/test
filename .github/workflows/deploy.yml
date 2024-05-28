@@ -35,10 +35,18 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2  # Elastic Beanstalk 환경이 있는 AWS 리전
+        aws-region: ap-northeast-2  # Seoul 리전
+
+    - name: Create S3 Bucket if not exists
+      run: |
+        aws s3api create-bucket --bucket my-deploy-bucket --region ap-northeast-2 --create-bucket-configuration LocationConstraint=ap-northeast-2 || true
+
+    - name: Upload deployment package to S3
+      run: |
+        zip -r deploy.zip . -x "*.git*"
+        aws s3 cp deploy.zip s3://my-deploy-bucket/deploy.zip
 
     - name: Deploy to Elastic Beanstalk
       run: |
-        zip -r deploy.zip . -x "*.git*"
-        aws elasticbeanstalk create-application-version --application-name Node-test-env --version-label v1 --source-bundle S3Bucket="my-bucket",S3Key="deploy.zip"
+        aws elasticbeanstalk create-application-version --application-name Node-test-env --version-label v1 --source-bundle S3Bucket="my-deploy-bucket",S3Key="deploy.zip"
         aws elasticbeanstalk update-environment --environment-name Node-test-env --version-label v1
