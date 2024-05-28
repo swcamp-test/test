@@ -1,0 +1,32 @@
+name: Deploy Vite Project
+
+on:
+  push:
+    branches:
+      - main  # 배포를 트리거하는 브랜치 이름 (필요에 따라 변경)
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # 프로젝트에서 사용하는 Node.js 버전
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist  # Vite 빌드 결과물이 저장되는 디렉토리
+
