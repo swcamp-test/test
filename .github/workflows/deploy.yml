@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20'
+        node-version: '16'
 
     - name: Install dependencies
       run: npm install
@@ -42,9 +42,8 @@ jobs:
         mkdir -p deploy
         cp -r dist/* deploy/
         cp package.json deploy/
+        cp server.js deploy/          # server.js 파일을 배포 패키지에 포함
         cp Procfile deploy/Procfile
-        cp -r .ebextensions deploy/.ebextensions || true
-        cp -r .platform deploy/.platform || true
         cd deploy && zip -r deploy.zip .
 
     - name: Beanstalk Deploy
@@ -52,7 +51,7 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: node-test3
+        application_name: Node-test3
         environment_name: Node-test3-env
         version_label: github-action-${{ github.sha }}
         region: ap-northeast-2
