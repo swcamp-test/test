@@ -3,7 +3,7 @@ name: Deploy to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - main  # 배포를 트리거하는 브랜치 이름 (필요에 따라 변경)
+      - main
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'  # 프로젝트에서 사용하는 Node.js 버전
+        node-version: '16'
 
     - name: Install dependencies
       run: npm install
@@ -35,14 +35,14 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2  # Seoul 리전
+        aws-region: ap-northeast-2
 
     - name: Generate deployment package
       run: |
         mkdir -p deploy
         cp -r dist/* deploy/
         cp package.json deploy/
-        cp Procfile deploy/Procfile || true
+        cp Procfile deploy/Procfile
         cp -r .ebextensions deploy/.ebextensions || true
         cp -r .platform deploy/.platform || true
         cd deploy && zip -r deploy.zip .
@@ -52,8 +52,8 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: Node-test3  # 정확한 Elastic Beanstalk 애플리케이션 이름
-        environment_name: Node-test3-env  # 정확한 Elastic Beanstalk 환경 이름
+        application_name: Node-test3
+        environment_name: Node-test3-env
         version_label: github-action-${{ github.sha }}
         region: ap-northeast-2
         deployment_package: deploy/deploy.zip
