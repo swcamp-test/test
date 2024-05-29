@@ -1,7 +1,14 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
 const app = express();
 const port = process.env.PORT || 8080;
+
+// __dirname을 ES 모듈에서 사용할 수 있도록 설정
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
