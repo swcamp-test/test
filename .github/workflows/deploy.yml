@@ -40,9 +40,9 @@ jobs:
     - name: Generate deployment package
       run: |
         mkdir -p deploy
-        cp -r dist/* deploy/
+        cp -r dist deploy/  # dist 디렉토리를 포함
         cp package.json deploy/
-        cp server.js deploy/          # server.js 파일을 배포 패키지에 포함
+        cp server.js deploy/ 
         cp Procfile deploy/Procfile
         cd deploy && zip -r deploy.zip .
 
@@ -51,7 +51,7 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: Node-test3
+        application_name: node-test3
         environment_name: Node-test3-env
         version_label: github-action-${{ github.sha }}
         region: ap-northeast-2
